@@ -1,0 +1,16 @@
+.joinings__list {
+  list-style: none;
+  margin: 0 auto;
+  max-width: 90%;
+  padding: 0;
+  width: 40rem;
+}
+
+.joinings__item {
+  align-items: center;
+  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+}
