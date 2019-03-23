@@ -103,9 +103,7 @@ class ClassesPage extends Component {
             date: resData.data.createClass.date,
             time: resData.data.createClass.time,
             creator: {
-              _id: this.context.userId,
-              name: resData.data.createClass.name,
-              gender: resData.data.createClass.gender
+              _id: this.context.userId
             }
           });
           return {

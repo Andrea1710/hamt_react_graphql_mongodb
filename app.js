@@ -9,7 +9,7 @@ const isAuth = require("./middleware/is-auth");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false })); // Parses urlencoded bodies
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -35,7 +35,7 @@ app.use(
 
 mongoose
   .connect(
-    `mongodb+srv://andrea:IXrjgcFVWzhSn0q8@hoianmuaythai-dev-lcrym.mongodb.net/test?retryWrites=true`
+    `mongodb+srv://andrea:XBD3nY16Pj8I4EfN@hoianmuaythai-dev-lcrym.mongodb.net/test?retryWrites=true`
   )
   .then(() => {
     app.listen(8000, () => {
