@@ -1,8 +1,10 @@
 .classes-control {
-    border: 1px solid red;
-    margin: 2rem auto;
-    max-width: 80%;
-    padding: 1rem;
-    text-align: center;
-    width: 30rem;
+  border: 1px solid red;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px #555;
+  margin: 2rem auto;
+  max-width: 80%;
+  padding: 1rem;
+  text-align: center;
+  width: 30rem;
 }

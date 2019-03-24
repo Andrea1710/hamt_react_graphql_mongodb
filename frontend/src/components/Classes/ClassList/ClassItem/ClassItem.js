@@ -15,7 +15,7 @@ const ClassItem = props => {
           View Details
         </button>
         {props.userId === props.creatorId && (
-          <p>You created this Muay Thai Class</p>
+          <p style={{ textAlign: "center" }}>Creator</p>
         )}
       </div>
     </li>

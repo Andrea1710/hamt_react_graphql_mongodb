@@ -4,20 +4,41 @@ import AuthContext from "../context/auth-context";
 
 import "./Auth.css";
 
+const emailRegex = RegExp(
+  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+);
+
+const formValid = ({ formErrors, ...rest }) => {
+  let valid = true;
+
+  // validate form errors being empty
+  Object.values(formErrors).forEach(val => {
+    val.length > 0 && (valid = false);
+  });
+
+  // validate the form was filled out
+  Object.values(rest).forEach(val => {
+    val === null && (valid = false);
+  });
+  return valid;
+};
+
 class AuthPage extends Component {
   state = {
+    name: "",
+    email: "",
+    password: "",
+    gender: "",
+    formErrors: {
+      name: "",
+      email: "",
+      password: "",
+      gender: ""
+    },
     isLogin: true
   };
 
   static contextType = AuthContext;
-
-  constructor(props) {
-    super(props);
-    this.nameEl = React.createRef();
-    this.emailEl = React.createRef();
-    this.passwordEl = React.createRef();
-    this.genderEl = React.createRef();
-  }
 
   switchModeHandler = () => {
     this.setState(prevState => {
@@ -27,13 +48,50 @@ class AuthPage extends Component {
     });
   };
 
+  onChangeHandler = event => {
+    const { name, value } = event.target;
+    let formErrors = this.state.formErrors;
+
+    switch (name) {
+      case "name":
+        formErrors.name =
+          value.length < 3 ? "Minimum 3 characters required" : "";
+        break;
+      case "email":
+        formErrors.email = emailRegex.test(value)
+          ? ""
+          : "Invalid Email address";
+        break;
+      case "password":
+        formErrors.password =
+          value.length < 6 ? "Minimum 6 characters required" : "";
+        break;
+      case "gender":
+        formErrors.gender = value.length === 0 ? "" : "This field is required";
+        break;
+      default:
+        break;
+    }
+    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+  };
+
   submitHandler = event => {
     event.preventDefault();
-    const email = this.emailEl.current.value;
-    const password = this.passwordEl.current.value;
+    const name = this.state.name;
+    const email = this.state.email;
+    const password = this.state.password;
+    const gender = this.state.gender;
 
-    if (email.trim().length === 0 || password.trim().length === 0) {
-      return;
+    if (formValid(this.state)) {
+      console.log(`
+        --SUBMITTING
+          Name: ${this.state.name}
+          Email: ${this.state.email}
+          Password: ${this.state.password}
+          Gender: ${this.state.gender}
+      `);
+    } else {
+      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
     }
 
     let requestBody = {
@@ -49,8 +107,6 @@ class AuthPage extends Component {
     };
 
     if (!this.state.isLogin) {
-      const name = this.nameEl.current.value;
-      const gender = this.genderEl.current.value;
       requestBody = {
         query: `
           mutation {
@@ -93,83 +149,128 @@ class AuthPage extends Component {
   };
 
   render() {
+    const { formErrors } = this.state;
+
     const signup = (
-      <form className="auth-form" onSubmit={this.submitHandler}>
-        <div>
-          <h1 style={{ color: "red" }}>REGISTER</h1>
-        </div>
-        <div className="form-control">
-          <label htmlFor="name">Name</label>
-          <input placeholder=" Name" type="text" id="name" ref={this.nameEl} />
-        </div>
-        <div className="form-control">
-          <label htmlFor="email">Email</label>
-          <input
-            placeholder=" test@test.com"
-            type="email"
-            id="email"
-            ref={this.emailEl}
-          />
-        </div>
-        <div className="form-control">
-          <label htmlFor="password">Password</label>
-          <input
-            placeholder=" Password"
-            type="password"
-            id="password"
-            ref={this.passwordEl}
-          />
-        </div>
-        <div className="form-control">
-          <label htmlFor="gender">Gender</label>
-          <input
-            placeholder=" Male / Female"
-            type="text"
-            id="gender"
-            ref={this.genderEl}
-          />
-        </div>
-        <div className="form-actions">
-          <button type="submit">Register</button>
-          <button type="button" onClick={this.switchModeHandler}>
-            Switch to Login
-          </button>
-        </div>
-      </form>
+      <div className="form-wrapper">
+        <h1 style={{ color: "red" }}>REGISTER</h1>
+        <form onSubmit={this.submitHandler}>
+          <div className="name">
+            <label htmlFor="name">Name</label>
+            <input
+              className={formErrors.name.length > 0 ? "error" : null}
+              name="name"
+              placeholder=" Name"
+              value={this.state.name}
+              onChange={event => this.onChangeHandler(event)}
+              type="text"
+              id="name"
+            />
+            {formErrors.name.length > 0 && (
+              <span className="errorMessage">{formErrors.name}</span>
+            )}
+          </div>
+          <div className="email">
+            <label htmlFor="email">Email</label>
+            <input
+              className={formErrors.email.length > 0 ? "error" : null}
+              name="email"
+              placeholder=" test@test.com"
+              type="email"
+              id="email"
+              value={this.state.email}
+              onChange={event => this.onChangeHandler(event)}
+            />
+            {formErrors.email.length > 0 && (
+              <span className="errorMessage">{formErrors.email}</span>
+            )}
+          </div>
+          <div className="password">
+            <label htmlFor="password">Password</label>
+            <input
+              className={formErrors.password.length > 0 ? "error" : null}
+              name="password"
+              placeholder=" Password"
+              type="password"
+              id="password"
+              value={this.state.password}
+              onChange={event => this.onChangeHandler(event)}
+            />
+            {formErrors.password.length > 0 && (
+              <span className="errorMessage">{formErrors.password}</span>
+            )}
+          </div>
+          <div className="gender">
+            <label htmlFor="gender">Gender</label>
+            <input
+              className={formErrors.gender.length > 0 ? "error" : null}
+              name="gender"
+              placeholder=" Male / Female"
+              type="text"
+              id="gender"
+              value={this.state.gender}
+              onChange={event => this.onChangeHandler(event)}
+            />
+            {formErrors.gender.length > 0 && (
+              <span className="errorMessage">{formErrors.gender}</span>
+            )}
+          </div>
+          <div className="createAccount">
+            <button type="submit">Register</button>
+            <small>Already have an Account?</small>
+            <button type="button" onClick={this.switchModeHandler}>
+              Switch to Login
+            </button>
+          </div>
+        </form>
+      </div>
     );
 
     const login = (
-      <form className="auth-form" onSubmit={this.submitHandler}>
-        <div>
-          <h1 style={{ color: "red" }}>LOGIN</h1>
-        </div>
-        <div className="form-control">
-          <label htmlFor="email">Email</label>
-          <input
-            placeholder=" test@test.com"
-            type="email"
-            id="email"
-            ref={this.emailEl}
-          />
-        </div>
-        <div className="form-control">
-          <label htmlFor="password">Password</label>
-          <input
-            placeholder=" Password"
-            type="password"
-            id="password"
-            ref={this.passwordEl}
-          />
-        </div>
-        <div className="form-actions">
-          <button type="submit">Login</button>
-          <button type="button" onClick={this.switchModeHandler}>
-            Switch to Signup
-          </button>
-        </div>
-      </form>
+      <div className="form-wrapper">
+        <h1 style={{ color: "red" }}>LOGIN</h1>
+        <form onSubmit={this.submitHandler}>
+          <div className="email">
+            <label htmlFor="email">Email</label>
+            <input
+              className={formErrors.email.length > 0 ? "error" : null}
+              name="email"
+              placeholder=" test@test.com"
+              type="email"
+              id="email"
+              value={this.state.email}
+              onChange={event => this.onChangeHandler(event)}
+            />
+            {formErrors.email.length > 0 && (
+              <span className="errorMessage">{formErrors.email}</span>
+            )}
+          </div>
+          <div className="password">
+            <label htmlFor="password">Password</label>
+            <input
+              className={formErrors.password.length > 0 ? "error" : null}
+              name="password"
+              placeholder=" Password"
+              type="password"
+              id="password"
+              value={this.state.password}
+              onChange={event => this.onChangeHandler(event)}
+            />
+            {formErrors.password.length > 0 && (
+              <span className="errorMessage">{formErrors.password}</span>
+            )}
+          </div>
+          <div className="createAccount">
+            <button type="submit">Login</button>
+            <small>Don't have an Account yet?</small>
+            <button type="button" onClick={this.switchModeHandler}>
+              Switch to Signup
+            </button>
+          </div>
+        </form>
+      </div>
     );
-    return <div>{this.state.isLogin ? login : signup}</div>;
+    return <div className="wrapper">{this.state.isLogin ? login : signup}</div>;
   }
 }
 

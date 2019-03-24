@@ -9,7 +9,9 @@ const JoiningList = props => {
         return (
           <li key={joining._id} className="joinings__item">
             <div className="joinings__item-data">
-              {joining.mtclass.title} - {joining.mtclass.date}
+              <h1>{joining.mtclass.title}</h1>
+              <p>{joining.mtclass.date}</p>
+              <p>{joining.mtclass.time}</p>
             </div>
             <div className="joinings__item-actions">
               <button

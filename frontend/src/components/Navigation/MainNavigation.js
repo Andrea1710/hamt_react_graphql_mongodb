@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
+import image from "../../assets/hoi_an_muay_thai_logo.png";
+
 import AuthContext from "../../context/auth-context";
 import "./MainNavigation.css";
 
@@ -10,7 +12,10 @@ const mainNavigation = props => (
       return (
         <header className="main-navigation">
           <div className="main-navigation__logo">
-            <h1>HOI AN MUAY THAI</h1>
+            <NavLink to="/">
+              <h1>HOI AN MUAY THAI</h1>
+              <img className="image" src={image} alt="HOI AN MUAY THAI" />
+            </NavLink>
           </div>
           <nav className="main-navigation__items">
             <ul>

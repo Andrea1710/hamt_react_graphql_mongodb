@@ -28,6 +28,7 @@ class JoiningsPage extends Component {
                _id
                title
                date
+               time
              }
             }
           }

@@ -9,6 +9,8 @@ import AuthContext from "./context/auth-context";
 
 import "./App.css";
 
+const Dashboard = () => <div>Dashboard</div>;
+
 class App extends Component {
   state = {
     token: null,
@@ -38,10 +40,7 @@ class App extends Component {
             <MainNavigation />
             <main className="main-content">
               <Switch>
-                {this.state.token && <Redirect from="/" to="/classes" exact />}
-                {this.state.token && (
-                  <Redirect from="/auth" to="/classes" exact />
-                )}
+                {this.state.token && <Redirect from="/auth" to="/" exact />}
                 {!this.state.token && (
                   <Route path="/auth" component={AuthPage} />
                 )}
@@ -50,6 +49,7 @@ class App extends Component {
                   <Route path="/joinings" component={JoiningsPage} />
                 )}
                 {!this.state.token && <Redirect to="/auth" exact />}
+                <Route path="/" component={Dashboard} />
               </Switch>
             </main>
           </AuthContext.Provider>
