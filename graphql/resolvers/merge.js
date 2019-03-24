@@ -1,10 +1,26 @@
 const Class = require("../../models/class");
 const User = require("../../models/user");
+const DataLoader = require("dataloader");
 const { dateToString } = require("../../helpers/date");
+
+const classLoader = new DataLoader(classIds => {
+  return classes(classIds);
+});
+
+const userLoader = new DataLoader(userIds => {
+  return User.find({ _id: { $in: userIds } });
+});
 
 const classes = async classIds => {
   try {
     const classes = await Class.find({ _id: { $in: classIds } });
+    classes.sort((a, b) => {
+      return (
+        classIds.indexOf(a._id.toString()) - classIds.indexOf(b._id.toString())
+      );
+    });
+    console.log(classes, classIds);
+
     return classes.map(mtclass => {
       return transformClass(mtclass);
     });
@@ -15,8 +31,8 @@ const classes = async classIds => {
 
 const singleClass = async classId => {
   try {
-    const mtclass = await Class.findById(classId);
-    return transformClass(mtclass);
+    const mtclass = await classLoader.load(classId.toString());
+    return mtclass;
   } catch (err) {
     throw err;
   }
@@ -24,11 +40,11 @@ const singleClass = async classId => {
 
 const user = async userId => {
   try {
-    const user = await User.findById(userId);
+    const user = await userLoader.load(userId.toString());
     return {
       ...user._doc,
       _id: user.id,
-      createdClasses: classes.bind(this, user._doc.createdClasses)
+      createdClasses: () => classLoader.loadMany(user._doc.createdClasses)
     };
   } catch (err) {
     throw err;

@@ -133,6 +133,7 @@ class ClassesPage extends Component {
               time
               creator {
                 _id
+                name
                 email
               }
             }
@@ -267,8 +268,8 @@ class ClassesPage extends Component {
           >
             <h1>{this.state.selectedClass.title}</h1>
             <h2>{this.state.selectedClass.description}</h2>
-            <h2>{this.state.selectedClass.date}</h2>
-            <h2>{this.state.selectedClass.time}</h2>
+            <p>{this.state.selectedClass.date}</p>
+            <p>{this.state.selectedClass.time}</p>
           </Modal>
         )}
         {this.context.token && (

@@ -8,7 +8,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const joinings = await Joining.find();
+      const joinings = await Joining.find({ user: req.userId });
       return joinings.map(joining => {
         return transformJoining(joining);
       });

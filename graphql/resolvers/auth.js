@@ -1,9 +1,27 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
 const User = require("../../models/user");
 
 module.exports = {
   createUser: async args => {
+    const errors = [];
+    if (!validator.isEmail(args.userInput.email)) {
+      errors.push({ message: "Email is invalid" });
+    }
+    if (
+      validator.isEmpty(args.userInput.password) ||
+      !validator.isLength(args.userInput.password, { min: 5 })
+    ) {
+      errors.push({
+        message: "Password too short (It should be at least of 5 characters"
+      });
+    }
+    if (errors.length > 0) {
+      const error = new Error("Invalid Input");
+      throw error;
+    }
+
     try {
       const existingUser = await User.findOne({
         email: args.userInput.email

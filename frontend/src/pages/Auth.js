@@ -95,6 +95,9 @@ class AuthPage extends Component {
   render() {
     const signup = (
       <form className="auth-form" onSubmit={this.submitHandler}>
+        <div>
+          <h1 style={{ color: "red" }}>REGISTER</h1>
+        </div>
         <div className="form-control">
           <label htmlFor="name">Name</label>
           <input placeholder=" Name" type="text" id="name" ref={this.nameEl} />
@@ -137,6 +140,9 @@ class AuthPage extends Component {
 
     const login = (
       <form className="auth-form" onSubmit={this.submitHandler}>
+        <div>
+          <h1 style={{ color: "red" }}>LOGIN</h1>
+        </div>
         <div className="form-control">
           <label htmlFor="email">Email</label>
           <input

@@ -12,7 +12,10 @@ const JoiningList = props => {
               {joining.mtclass.title} - {joining.mtclass.date}
             </div>
             <div className="joinings__item-actions">
-              <button className="btn" onClick={props.onDelete}>
+              <button
+                className="btn"
+                onClick={() => props.onDelete(joining._id)}
+              >
                 Cancel
               </button>
             </div>

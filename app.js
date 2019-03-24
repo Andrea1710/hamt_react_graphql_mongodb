@@ -35,7 +35,7 @@ app.use(
 
 mongoose
   .connect(
-    `mongodb+srv://andrea:XBD3nY16Pj8I4EfN@hoianmuaythai-dev-lcrym.mongodb.net/test?retryWrites=true`
+    `mongodb+srv://andrea:XBD3nY16Pj8I4EfN@hoianmuaythai-dev-lcrym.mongodb.net/hoianmuaythai-dev?retryWrites=true`
   )
   .then(() => {
     app.listen(8000, () => {
