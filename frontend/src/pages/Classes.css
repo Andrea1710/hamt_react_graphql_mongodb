@@ -2,9 +2,131 @@
   border: 1px solid red;
   border-radius: 10px;
   box-shadow: 0px 2px 10px #555;
-  margin: 2rem auto;
+  margin: 1rem auto;
   max-width: 80%;
   padding: 1rem;
   text-align: center;
   width: 30rem;
+}
+
+.modal {
+  padding: 0.5rem;
+  width: 30rem;
+}
+
+.modal input,
+.modal textarea {
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  padding: 1rem 0.3rem;
+}
+
+h1 {
+  text-align: center;
+  width: 100%;
+  color: red;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+label {
+  font-size: 0.8em;
+  margin-bottom: 0.25em;
+  color: #222;
+  font-weight: bold;
+}
+
+.form-wrapper input {
+  padding: 10px 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #cfcfcf;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+input::placeholder {
+  font-size: 1.2em;
+  font-weight: lighter;
+  color: #999;
+}
+
+input.error {
+  border: 1px solid red;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 0.75em;
+  display: relative;
+  margin-top: 5px;
+}
+
+.title {
+  margin-right: 1%;
+}
+
+.time {
+  margin-left: 1%;
+}
+
+.title,
+.description,
+.date,
+.time {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.title,
+.description,
+.date,
+.time {
+  width: 100%;
+}
+
+.createClass {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.createClass button {
+  background-color: rgb(223, 39, 39);
+  color: white;
+  border: 1px solid black;
+  box-shadow: 5px 3px 3px rgba(0, 0, 0, 0.5);
+  width: 50%;
+  margin-top: 1em;
+  padding: 8px 0px;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 0.25em;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.createClass button:hover {
+  color: red;
+  background-color: black;
+  border: 1px solid red;
+  font-weight: bold;
+}
+
+.createClass small {
+  color: #999;
+  font-weight: lighter;
+}
+
+@media (max-width: 768px) {
+  .form-wrapper {
+    width: 80%;
+  }
+  .modal {
+    width: 20rem;
+  }
 }

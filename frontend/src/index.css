@@ -21,13 +21,14 @@ body {
 
 .form-actions button,
 .btn {
-  background: rgb(250, 95, 95);
+  background: rgb(243, 2, 2);
   font: inherit;
   border: 1px solid black;
   border-radius: 3px;
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 2rem;
   margin-right: 1rem;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.26);
+  border-radius: 10px;
   color: white;
   cursor: pointer;
 }
@@ -36,8 +37,9 @@ body {
 .form-actions button:active,
 .btn:hover,
 .btn:active {
-  background: red;
-  border-color: black;
+  background: black;
+  border-color: red;
+  color: red;
 }
 
 @media (max-width: 768px) {

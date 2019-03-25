@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
+import SideDrawer from "./components/Navigation/SideDrawer/SideDrawer";
+import Backdrop from "./components/Backdrop/Backdrop";
 import AuthPage from "./pages/Auth";
 import JoiningsPage from "./pages/Joinings";
 import ClassesPage from "./pages/Classes";
@@ -14,7 +16,20 @@ const Dashboard = () => <div>Dashboard</div>;
 class App extends Component {
   state = {
     token: null,
-    userId: null
+    userId: null,
+    sideDrawerOpen: false
+  };
+
+  drawerToggleClickHandler = () => {
+    this.setState(prevState => {
+      return {
+        sideDrawerOpen: !prevState.sideDrawerOpen
+      };
+    });
+  };
+
+  backdropClickHandler = () => {
+    this.setState({ sideDrawerOpen: false });
   };
 
   login = (token, userId, tokenExpiration) => {
@@ -26,6 +41,10 @@ class App extends Component {
   };
 
   render() {
+    let backdrop;
+    if (this.state.sideDrawerOpen) {
+      backdrop = <Backdrop click={this.backdropClickHandler} />;
+    }
     return (
       <BrowserRouter>
         <React.Fragment>
@@ -37,7 +56,11 @@ class App extends Component {
               logout: this.logout
             }}
           >
-            <MainNavigation />
+            <MainNavigation
+              drawerClickHandler={this.drawerToggleClickHandler}
+            />
+            <SideDrawer show={this.state.sideDrawerOpen} />
+            {backdrop}
             <main className="main-content">
               <Switch>
                 {this.state.token && <Redirect from="/auth" to="/" exact />}

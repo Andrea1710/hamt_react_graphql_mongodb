@@ -3,8 +3,9 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 3.5rem;
-  background: black;
+  height: 4.5rem;
+  background: rgb(46, 44, 44);
+  box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.75);
   padding: 0 2rem;
   display: flex;
   align-items: center;
@@ -13,21 +14,8 @@
 }
 
 .image {
-  display: none;
-}
-
-.main-navigation__logo {
-  text-decoration: none;
-}
-
-.main-navigation__logo h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: red;
-}
-
-.main-navigation__items {
-  margin-left: 1.5rem;
+  height: 5rem;
+  width: 5rem;
 }
 
 .main-navigation__items ul {
@@ -71,10 +59,15 @@
   }
   .main-navigation__items a,
   .main-navigation__items button {
-    font-size: 0.8rem;
+    display: none;
   }
-  .image {
-    display: inline;
-    height: 3.5rem;
+  .main-navigation__items li {
+    margin: 0.2rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .main-navigation__toggle-button {
+    display: none;
   }
 }

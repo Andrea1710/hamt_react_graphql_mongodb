@@ -7,24 +7,42 @@ import Spinner from "../components/Spinner/Spinner";
 import AuthContext from "../context/auth-context";
 import "./Classes.css";
 
+const formValid = ({ formErrors, ...rest }) => {
+  let valid = true;
+
+  // validate form errors being empty
+  Object.values(formErrors).forEach(val => {
+    val.length > 0 && (valid = false);
+  });
+
+  // validate the form was filled out
+  Object.values(rest).forEach(val => {
+    val === null && (valid = false);
+  });
+  return valid;
+};
+
 class ClassesPage extends Component {
   state = {
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    formErrors: {
+      title: "",
+      description: "",
+      date: "",
+      time: ""
+    },
     creating: false,
     classes: [],
     isLoading: false,
-    selectedClass: null
+    selectedClass: null,
+    sideDrawerOpen: false
   };
   isActive = true;
 
   static contextType = AuthContext;
-
-  constructor(props) {
-    super(props);
-    this.titleElRef = React.createRef();
-    this.descriptionElRef = React.createRef();
-    this.dateElRef = React.createRef();
-    this.timeElRef = React.createRef();
-  }
 
   componentDidMount() {
     this.fetchClasses();
@@ -34,20 +52,47 @@ class ClassesPage extends Component {
     this.setState({ creating: true });
   };
 
+  onChangeHandler = event => {
+    const { name, value } = event.target;
+    let formErrors = this.state.formErrors;
+
+    switch (name) {
+      case "title":
+        formErrors.title = value.length === 0 ? "This field is required" : "";
+        break;
+      case "description":
+        formErrors.description =
+          value.length === 0 ? "This field is required" : "";
+        break;
+      case "date":
+        formErrors.date = value.length === 0 ? "This field is required" : "";
+        break;
+      case "time":
+        formErrors.time = value.length === 0 ? "This field is required" : "";
+        break;
+      default:
+        break;
+    }
+    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+  };
+
   modalConfirmHandler = () => {
     this.setState({ creating: false });
-    const title = this.titleElRef.current.value;
-    const description = this.descriptionElRef.current.value;
-    const date = this.dateElRef.current.value;
-    const time = this.timeElRef.current.value;
+    const title = this.state.title;
+    const description = this.state.description;
+    const date = this.state.date;
+    const time = this.state.time;
 
-    if (
-      title.trim().length === 0 ||
-      description.trim().length === 0 ||
-      date.trim().length === 0 ||
-      time.trim().length === 0
-    ) {
-      return;
+    if (formValid(this.state)) {
+      console.log(`
+        --SUBMITTING
+          Name: ${this.state.name}
+          Email: ${this.state.email}
+          Password: ${this.state.password}
+          Gender: ${this.state.gender}
+      `);
+    } else {
+      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
     }
 
     const mtclass = {
@@ -68,6 +113,7 @@ class ClassesPage extends Component {
               date
               time
               creator {
+                _id
                 name
               }
           }
@@ -220,11 +266,16 @@ class ClassesPage extends Component {
   }
 
   render() {
+    console.log(this.context.userId);
+
+    const { formErrors } = this.state;
+
     return (
       <React.Fragment>
         {(this.state.creating || this.state.selectedClass) && <Backdrop />}
         {this.state.creating && (
           <Modal
+            className="modal"
             title="Creation of a Muay Thai Class"
             canCancel
             canConfirm
@@ -235,24 +286,60 @@ class ClassesPage extends Component {
             <form>
               <div className="form-control">
                 <label htmlFor="title">Title</label>
-                <input type="text" id="title" ref={this.titleElRef} />
+                <input
+                  className={formErrors.title.length > 0 ? "error" : null}
+                  name="title"
+                  type="text"
+                  id="title"
+                  value={this.state.title}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+                {formErrors.title.length > 0 && (
+                  <span className="errorMessage">{formErrors.title}</span>
+                )}
               </div>
               <div className="form-control">
                 <label htmlFor="description">Description</label>
                 <textarea
+                  className={formErrors.description.length > 0 ? "error" : null}
+                  name="description"
                   type="text"
                   id="description"
                   rows="4"
-                  ref={this.descriptionElRef}
+                  value={this.state.description}
+                  onChange={event => this.onChangeHandler(event)}
                 />
+                {formErrors.description.length > 0 && (
+                  <span className="errorMessage">{formErrors.description}</span>
+                )}
               </div>
               <div className="form-control">
                 <label htmlFor="date">Date</label>
-                <input type="date" id="date" ref={this.dateElRef} />
+                <input
+                  className={formErrors.date.length > 0 ? "error" : null}
+                  name="date"
+                  type="date"
+                  id="date"
+                  value={this.state.date}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+                {formErrors.date.length > 0 && (
+                  <span className="errorMessage">{formErrors.date}</span>
+                )}
               </div>
               <div className="form-control">
                 <label htmlFor="time">Time</label>
-                <input type="text" id="time" ref={this.timeElRef} />
+                <input
+                  className={formErrors.time.length > 0 ? "error" : null}
+                  name="time"
+                  type="text"
+                  id="time"
+                  value={this.state.time}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+                {formErrors.time.length > 0 && (
+                  <span className="errorMessage">{formErrors.time}</span>
+                )}
               </div>
             </form>
           </Modal>
@@ -272,14 +359,15 @@ class ClassesPage extends Component {
             <p>{this.state.selectedClass.time}</p>
           </Modal>
         )}
-        {this.context.token && (
-          <div className="classes-control">
-            <p>Create a new Muay Thai Class</p>
-            <button className="btn" onClick={this.startCreateClassHandler}>
-              Create Class
-            </button>
-          </div>
-        )}
+        {this.context.token &&
+          this.context.userId === "5c9451446232f74543d6bc9c" && (
+            <div className="classes-control">
+              <p>Create a new Muay Thai Class</p>
+              <button className="btn" onClick={this.startCreateClassHandler}>
+                Create Class
+              </button>
+            </div>
+          )}
         {this.state.isLoading ? (
           <Spinner />
         ) : (

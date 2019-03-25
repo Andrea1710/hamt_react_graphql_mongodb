@@ -1,5 +1,5 @@
 .wrapper {
-  height: 80vh;
+  height: 70vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@
   background-color: #ffffff;
 }
 
-form {
+.wrapper form {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -36,14 +36,15 @@ label {
   font-size: 0.8em;
   margin-bottom: 0.25em;
   color: #222;
-  font-weight: lighter;
+  font-weight: bold;
 }
 
-input {
+.form-wrapper input {
   padding: 10px 10px;
   border-radius: 5px;
   outline: none;
   border: 1px solid #cfcfcf;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
 }
 
 input::placeholder {
@@ -60,6 +61,7 @@ input.error {
   color: red;
   font-size: 0.75em;
   display: relative;
+  margin-top: 5px;
 }
 
 .name {
@@ -95,13 +97,13 @@ input.error {
 
 .createAccount button {
   background-color: rgb(223, 39, 39);
-  color: #fff;
+  color: white;
   border: 1px solid black;
-  width: 100%;
+  box-shadow: 5px 3px 3px rgba(0, 0, 0, 0.5);
+  width: 90%;
   margin-top: 1em;
   padding: 8px 0px;
   font-size: 1em;
-  font-weight: lighter;
   letter-spacing: 1px;
   margin-bottom: 0.25em;
   border-radius: 10px;
@@ -110,7 +112,7 @@ input.error {
 
 .createAccount button:hover {
   color: red;
-  background-color: #fff;
+  background-color: black;
   border: 1px solid red;
 }
 
