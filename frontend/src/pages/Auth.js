@@ -35,10 +35,19 @@ class AuthPage extends Component {
       password: "",
       gender: ""
     },
-    isLogin: true
+    isLogin: true,
+    showEye: false
   };
 
   static contextType = AuthContext;
+
+  showPassword = () => {
+    this.setState(prevState => {
+      return {
+        showEye: !prevState.showEye
+      };
+    });
+  };
 
   switchModeHandler = () => {
     this.setState(prevState => {
@@ -151,6 +160,13 @@ class AuthPage extends Component {
   render() {
     const { formErrors } = this.state;
 
+    let showPassword = "fa fa-eye";
+    let passwordText = "password";
+    if (this.state.showEye) {
+      showPassword = "fa fa-eye active";
+      passwordText = "text";
+    }
+
     const signup = (
       <div className="form-wrapper">
         <h1 style={{ color: "red" }}>REGISTER</h1>
@@ -186,12 +202,17 @@ class AuthPage extends Component {
             )}
           </div>
           <div className="password">
-            <label htmlFor="password">Password</label>
+            <div>
+              <label htmlFor="password" id="password">
+                Password
+              </label>
+              <i className={showPassword} onClick={this.showPassword} />
+            </div>
             <input
               className={formErrors.password.length > 0 ? "error" : null}
               name="password"
               placeholder=" Password"
-              type="password"
+              type={passwordText}
               id="password"
               value={this.state.password}
               onChange={event => this.onChangeHandler(event)}
@@ -246,12 +267,17 @@ class AuthPage extends Component {
             )}
           </div>
           <div className="password">
-            <label htmlFor="password">Password</label>
+            <div>
+              <label htmlFor="password" id="password">
+                Password
+              </label>
+              <i className={showPassword} onClick={this.showPassword} />
+            </div>
             <input
               className={formErrors.password.length > 0 ? "error" : null}
               name="password"
               placeholder=" Password"
-              type="password"
+              type={passwordText}
               id="password"
               value={this.state.password}
               onChange={event => this.onChangeHandler(event)}
