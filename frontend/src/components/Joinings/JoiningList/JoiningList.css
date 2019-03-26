@@ -8,6 +8,7 @@
 
 .joinings__item {
   align-items: center;
+  background: white;
   border-radius: 10px;
   box-shadow: 0px 2px 10px #555;
   display: flex;

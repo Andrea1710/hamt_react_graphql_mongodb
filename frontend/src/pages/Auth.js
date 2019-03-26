@@ -35,6 +35,7 @@ class AuthPage extends Component {
       password: "",
       gender: ""
     },
+    errors: "",
     isLogin: true,
     showEye: false
   };
@@ -81,7 +82,7 @@ class AuthPage extends Component {
       default:
         break;
     }
-    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+    this.setState({ formErrors, [name]: value });
   };
 
   submitHandler = event => {
@@ -110,6 +111,7 @@ class AuthPage extends Component {
             userId
             token
             tokenExpiration
+            username 
           }
         }
       `
@@ -139,15 +141,21 @@ class AuthPage extends Component {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
+          this.setState({
+            errors: "Email or password are incorrect. Check and try again."
+          });
           throw new Error("Failed");
         }
         return res.json();
       })
       .then(resData => {
         if (resData.data.login.token) {
+          console.log(resData);
+
           this.context.login(
             resData.data.login.token,
             resData.data.login.userId,
+            resData.data.login.username,
             resData.data.login.tokenExpiration
           );
         }
@@ -158,7 +166,7 @@ class AuthPage extends Component {
   };
 
   render() {
-    const { formErrors } = this.state;
+    const { formErrors, errors } = this.state;
 
     let showPassword = "fa fa-eye";
     let passwordText = "password";
@@ -284,6 +292,9 @@ class AuthPage extends Component {
             />
             {formErrors.password.length > 0 && (
               <span className="errorMessage">{formErrors.password}</span>
+            )}
+            {errors.length > 0 && (
+              <span className="errorMessage">{errors}</span>
             )}
           </div>
           <div className="createAccount">

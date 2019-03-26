@@ -4,19 +4,20 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import SideDrawer from "./components/Navigation/SideDrawer/SideDrawer";
 import Backdrop from "./components/Backdrop/Backdrop";
 import AuthPage from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 import JoiningsPage from "./pages/Joinings";
 import ClassesPage from "./pages/Classes";
 import MainNavigation from "./components/Navigation/MainNavigation";
+
 import AuthContext from "./context/auth-context";
 
 import "./App.css";
-
-const Dashboard = () => <div>Dashboard</div>;
 
 class App extends Component {
   state = {
     token: null,
     userId: null,
+    username: null,
     sideDrawerOpen: false
   };
 
@@ -32,8 +33,8 @@ class App extends Component {
     this.setState({ sideDrawerOpen: false });
   };
 
-  login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+  login = (token, userId, username) => {
+    this.setState({ token: token, userId: userId, username: username });
   };
 
   logout = () => {
@@ -52,6 +53,7 @@ class App extends Component {
             value={{
               token: this.state.token,
               userId: this.state.userId,
+              username: this.state.username,
               login: this.login,
               logout: this.logout
             }}

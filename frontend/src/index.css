@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Helvetica, Arial, sans-serif;
+  background: url("../src/assets/boxe_background.jpg");
 }
 
 .form-control label,
@@ -21,9 +22,9 @@ body {
 
 .form-actions button,
 .btn {
-  background: rgb(243, 2, 2);
+  background: black;
   font: inherit;
-  border: 1px solid black;
+  border: 1px solid red;
   border-radius: 3px;
   padding: 0.5rem 2rem;
   margin-right: 1rem;

@@ -58,6 +58,7 @@ module.exports = {
     if (!isEqual) {
       throw new Error("Password is incorrect");
     }
+
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       "somesupersecretkey",
@@ -67,6 +68,7 @@ module.exports = {
     );
 
     return {
+      username: user.name,
       userId: user.id,
       token: token,
       tokenExpiration: 1
