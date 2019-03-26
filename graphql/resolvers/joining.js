@@ -1,5 +1,6 @@
 const Class = require("../../models/class");
 const Joining = require("../../models/joining");
+const User = require("../../models/user");
 const { transformJoining, transformClass } = require("./merge");
 
 module.exports = {
@@ -7,11 +8,20 @@ module.exports = {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
+
     try {
-      const joinings = await Joining.find({ user: req.userId });
-      return joinings.map(joining => {
-        return transformJoining(joining);
-      });
+      if (req.userId === "5c9451446232f74543d6bc9c") {
+        const joiningsAdmin = await Joining.find();
+        return joiningsAdmin.map(joining => {
+          return transformJoining(joining);
+        });
+      } else {
+        const joiningsUser = await Joining.find({ user: req.userId });
+
+        return joiningsUser.map(joining => {
+          return transformJoining(joining);
+        });
+      }
     } catch (err) {
       throw err;
     }

@@ -5,6 +5,7 @@ import SideDrawer from "./components/Navigation/SideDrawer/SideDrawer";
 import Backdrop from "./components/Backdrop/Backdrop";
 import AuthPage from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import HistoryAdmin from "./pages/HistoryAdmin";
 import JoiningsPage from "./pages/Joinings";
 import ClassesPage from "./pages/Classes";
 import MainNavigation from "./components/Navigation/MainNavigation";
@@ -73,6 +74,10 @@ class App extends Component {
                 {this.state.token && (
                   <Route path="/joinings" component={JoiningsPage} />
                 )}
+                {this.state.token &&
+                  this.state.userId === "5c9451446232f74543d6bc9c" && (
+                    <Route path="/history-admin" component={HistoryAdmin} />
+                  )}
                 {!this.state.token && <Redirect to="/auth" exact />}
                 <Route path="/" component={Dashboard} />
               </Switch>

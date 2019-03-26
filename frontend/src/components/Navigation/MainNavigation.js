@@ -42,6 +42,16 @@ const mainNavigation = props => {
                     </li>
                   </React.Fragment>
                 )}
+                {context.token &&
+                  context.userId === "5c9451446232f74543d6bc9c" && (
+                    <React.Fragment>
+                      <li>
+                        <NavLink style={{ color: "green" }} to="/history-admin">
+                          ADMIN
+                        </NavLink>
+                      </li>
+                    </React.Fragment>
+                  )}
               </ul>
             </nav>
           </header>

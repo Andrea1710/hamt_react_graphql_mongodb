@@ -10,12 +10,10 @@ import "./Classes.css";
 const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
 
-  // validate form errors being empty
   Object.values(formErrors).forEach(val => {
     val.length > 0 && (valid = false);
   });
 
-  // validate the form was filled out
   Object.values(rest).forEach(val => {
     val === null && (valid = false);
   });
@@ -73,7 +71,7 @@ class ClassesPage extends Component {
       default:
         break;
     }
-    this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+    this.setState({ formErrors, [name]: value });
   };
 
   modalConfirmHandler = () => {
@@ -138,8 +136,6 @@ class ClassesPage extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-
         this.setState(prevState => {
           const updatedClasses = [...prevState.classes];
           updatedClasses.push({
@@ -253,7 +249,6 @@ class ClassesPage extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
         this.setState({ selectedClass: null });
       })
       .catch(err => {
@@ -266,8 +261,6 @@ class ClassesPage extends Component {
   }
 
   render() {
-    console.log(this.context.userId);
-
     const { formErrors } = this.state;
 
     return (

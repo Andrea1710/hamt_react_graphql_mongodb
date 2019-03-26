@@ -56,7 +56,7 @@ const transformClass = mtclass => {
     ...mtclass._doc,
     _id: mtclass.id,
     date: dateToString(mtclass._doc.date),
-    creator: user.bind(this, mtclass.creator)
+    creator: () => user(mtclass.creator)
   };
 };
 

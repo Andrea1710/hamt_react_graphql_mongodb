@@ -77,7 +77,7 @@ class AuthPage extends Component {
           value.length < 6 ? "Minimum 6 characters required" : "";
         break;
       case "gender":
-        formErrors.gender = value.length === 0 ? "" : "This field is required";
+        formErrors.gender = value.length === 0 ? "This field is required" : "";
         break;
       default:
         break;
@@ -150,8 +150,6 @@ class AuthPage extends Component {
       })
       .then(resData => {
         if (resData.data.login.token) {
-          console.log(resData);
-
           this.context.login(
             resData.data.login.token,
             resData.data.login.userId,
