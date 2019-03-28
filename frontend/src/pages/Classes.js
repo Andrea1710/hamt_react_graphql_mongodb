@@ -204,6 +204,50 @@ class ClassesPage extends Component {
     });
   };
 
+  deleteClassHandler = classId => {
+    this.setState({ isLoading: true });
+    const requestBody = {
+      query: `
+          mutation CancelClass($id: ID!) {
+            cancelClass(classId: $id) {
+              _id
+              title
+            }
+          }
+        `,
+      variables: {
+        id: classId
+      }
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.context.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        this.setState(prevState => {
+          const updatedClasses = prevState.classes.filter(mtclass => {
+            return mtclass._id !== classId;
+          });
+          return { classes: updatedClasses, isLoading: false };
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ isLoading: false });
+      });
+  };
+
   joinClassHandler = () => {
     if (!this.context.token) {
       this.setState({ selectedClass: null });
@@ -279,6 +323,17 @@ class ClassesPage extends Component {
         title: "Trainer",
         dataIndex: "trainer",
         key: "trainer"
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (text, record) => (
+          <span>
+            <button onClick={() => this.deleteClassHandler(record.key)}>
+              Delete <strong>{record.title}</strong>
+            </button>
+          </span>
+        )
       }
     ];
 

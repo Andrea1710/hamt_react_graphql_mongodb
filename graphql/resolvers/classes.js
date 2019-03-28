@@ -44,5 +44,24 @@ module.exports = {
       console.log(err);
       throw err;
     }
+  },
+
+  cancelClass: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+
+    try {
+      const mtclass = await Class.findById(args.classId);
+      if (!mtclass) {
+        throw new Error("Class not found");
+      }
+
+      await Class.deleteOne({ _id: args.classId });
+
+      return mtclass;
+    } catch (err) {
+      throw err;
+    }
   }
 };

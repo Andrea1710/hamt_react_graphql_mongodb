@@ -28,6 +28,8 @@ module.exports = buildSchema(`
       date: String!
       gender: String!
       createdClasses: [Class!]
+      plan: String!
+      planExpiration: String!
     }
 
     type AuthData {
@@ -63,6 +65,7 @@ module.exports = buildSchema(`
 
     type RootMutation {
       createClass(classInput: ClassInput): Class
+      cancelClass(classId: ID!): Class
       createUser(userInput: UserInput): User
       cancelUser(userId: ID!): User!
       joinClass(classId: ID!): Joining!

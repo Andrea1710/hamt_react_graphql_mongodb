@@ -36,7 +36,8 @@ module.exports = {
         email: args.userInput.email,
         password: hashedPassword,
         date: new Date(args.userInput.date),
-        gender: args.userInput.gender
+        gender: args.userInput.gender,
+        plan: args.userInput.plan
       });
 
       const result = await user.save();
@@ -70,6 +71,8 @@ module.exports = {
     return {
       username: user.name,
       email: user.email,
+      plan: user.plan,
+      planExpiration: user.planExpiration,
       userId: user.id,
       token: token,
       tokenExpiration: 1
@@ -77,9 +80,9 @@ module.exports = {
   },
 
   cancelUser: async (args, req) => {
-    // if (!req.isAuth) {
-    //   throw new Error("Unauthenticated!");
-    // }
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
 
     try {
       const user = await User.findById(args.userId);

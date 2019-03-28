@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Table, Input, Button, Icon, Tag, Popconfirm, Form } from "antd";
+import { Table, Input, Button, Icon, Tag } from "antd";
 import Highlighter from "react-highlight-words";
+
+import moment from "moment";
 
 import "antd/dist/antd.css";
 
@@ -12,7 +14,7 @@ class Users extends Component {
   state = {
     isLoading: false,
     users: [],
-    searchText: ""
+    selectedItems: []
   };
   isActive = true;
 
@@ -34,6 +36,8 @@ class Users extends Component {
                     password
                     date
                     gender
+                    plan
+                    planExpiration
                 }
               }
             `
@@ -66,10 +70,6 @@ class Users extends Component {
           this.setState({ isLoading: false });
         }
       });
-  }
-
-  componentWillUnmount() {
-    this.isActive = false;
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -143,6 +143,10 @@ class Users extends Component {
     this.setState({ searchText: "" });
   };
 
+  componentWillUnmount() {
+    this.isActive = false;
+  }
+
   render() {
     const columns = [
       {
@@ -157,7 +161,12 @@ class Users extends Component {
         title: "Plan",
         dataIndex: "plan",
         key: "plan",
-        width: "20%"
+        width: "15%"
+      },
+      {
+        title: "Plan Expiration Date",
+        dataIndex: "date",
+        key: "date"
       },
       {
         title: "Email",
@@ -165,14 +174,20 @@ class Users extends Component {
         key: "email"
       },
       {
-        title: "Account Creation Date",
-        dataIndex: "date",
-        key: "date"
-      },
-      {
         title: "Gender",
         key: "gender",
         dataIndex: "gender",
+        filters: [
+          {
+            text: "Male",
+            value: "male"
+          },
+          {
+            text: "Female",
+            value: "female"
+          }
+        ],
+        onFilter: (value, record) => record.gender.indexOf(value) === 0,
         render: gender => (
           <span>
             {gender.map(tag => {
@@ -210,12 +225,21 @@ class Users extends Component {
 
     let data = [];
     const allUsers = this.state.users.map(user => {
+      let expirDate;
+      if (user.planExpiration === "") {
+        expirDate = "No Plan";
+      } else {
+        expirDate = moment(parseInt(user.planExpiration)).format(
+          "ddd Do MMM YYYY"
+        );
+      }
       return {
         key: user._id,
         name: user.name,
         email: user.email,
-        date: user.date,
-        gender: [user.gender.toLowerCase()]
+        date: expirDate,
+        gender: [user.gender.toLowerCase()],
+        plan: user.plan
       };
     });
     data = allUsers;
@@ -229,7 +253,7 @@ class Users extends Component {
         );
       },
       getCheckboxProps: record => ({
-        disabled: record.name === "Disabled User", // Column configuration not to be checked
+        disabled: record.name === "test",
         name: record.name
       })
     };
