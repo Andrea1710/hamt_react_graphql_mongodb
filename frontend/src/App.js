@@ -6,6 +6,7 @@ import Backdrop from "./components/Backdrop/Backdrop";
 import AuthPage from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import HistoryAdmin from "./pages/HistoryAdmin";
+import Users from "./pages/Users";
 import JoiningsPage from "./pages/Joinings";
 import ClassesPage from "./pages/Classes";
 import MainNavigation from "./components/Navigation/MainNavigation";
@@ -19,6 +20,8 @@ class App extends Component {
     token: null,
     userId: null,
     username: null,
+    email: null,
+    tokenExpiration: null,
     sideDrawerOpen: false
   };
 
@@ -34,8 +37,13 @@ class App extends Component {
     this.setState({ sideDrawerOpen: false });
   };
 
-  login = (token, userId, username) => {
-    this.setState({ token: token, userId: userId, username: username });
+  login = (token, userId, tokenExpiration, username, email) => {
+    this.setState({
+      token: token,
+      userId: userId,
+      username: username,
+      email: email
+    });
   };
 
   logout = () => {
@@ -53,8 +61,10 @@ class App extends Component {
           <AuthContext.Provider
             value={{
               token: this.state.token,
+              tokenExpiration: this.state.tokenExpiration,
               userId: this.state.userId,
               username: this.state.username,
+              email: this.state.email,
               login: this.login,
               logout: this.logout
             }}
@@ -75,8 +85,12 @@ class App extends Component {
                   <Route path="/joinings" component={JoiningsPage} />
                 )}
                 {this.state.token &&
-                  this.state.userId === "5c9451446232f74543d6bc9c" && (
+                  this.state.userId === "5c9b3c68211874c338b15058" && (
                     <Route path="/history-admin" component={HistoryAdmin} />
+                  )}
+                {this.state.token &&
+                  this.state.userId === "5c9b3c68211874c338b15058" && (
+                    <Route path="/users" component={Users} />
                   )}
                 {!this.state.token && <Redirect to="/auth" exact />}
                 <Route path="/" component={Dashboard} />

@@ -14,6 +14,7 @@ module.exports = {
       throw err;
     }
   },
+
   createClass: async (args, req) => {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
@@ -23,7 +24,8 @@ module.exports = {
       description: args.classInput.description,
       date: dateToString(args.classInput.date),
       time: args.classInput.time,
-      creator: req.userId
+      creator: req.userId,
+      trainer: args.classInput.trainer
     });
     let createdClass;
     try {

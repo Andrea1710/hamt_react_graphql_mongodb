@@ -8,13 +8,18 @@
 
 .joinings__item {
   align-items: center;
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   box-shadow: 0px 2px 10px #555;
   display: flex;
   justify-content: space-between;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
   padding: 0.5rem;
+}
+
+.joinings__item h1,
+p {
+  margin: 0;
 }
 
 @media (max-width: 768px) {

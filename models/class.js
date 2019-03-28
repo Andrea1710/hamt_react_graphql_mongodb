@@ -19,6 +19,10 @@ const classSchema = new Schema({
     type: String,
     required: true
   },
+  trainer: {
+    type: String,
+    required: true
+  },
   creator: {
     type: Schema.Types.ObjectId,
     ref: "User"

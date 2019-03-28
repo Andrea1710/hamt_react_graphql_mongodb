@@ -22,28 +22,42 @@ const SideDrawer = props => {
             </NavLink>
             <ul>
               {!context.token && (
-                <li>
-                  <NavLink to="/auth">Authenticate</NavLink>
-                </li>
+                <React.Fragment>
+                  <li>
+                    <NavLink to="/auth">Authenticate</NavLink>
+                  </li>
+                </React.Fragment>
               )}
-              <li>
-                <NavLink to="/classes">Classes</NavLink>
-              </li>
+              <React.Fragment>
+                <li>
+                  <NavLink to="/classes">Classes</NavLink>
+                </li>
+              </React.Fragment>
               {context.token && (
                 <React.Fragment>
                   <li>
                     <NavLink to="/joinings">History</NavLink>
                   </li>
                   <li>
-                    <button onClick={context.logout}>Logout</button>
+                    <button
+                      style={{ fontSize: "1.2rem" }}
+                      onClick={context.logout}
+                    >
+                      LOGOUT
+                    </button>
                   </li>
                 </React.Fragment>
               )}
-              {context.token && context.userId === "5c9451446232f74543d6bc9c" && (
+              {context.token && context.userId === "5c9b3c68211874c338b15058" && (
                 <React.Fragment>
                   <li>
                     <NavLink style={{ color: "green" }} to="/history-admin">
                       ADMIN
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink style={{ color: "green" }} to="/users">
+                      USERS
                     </NavLink>
                   </li>
                 </React.Fragment>

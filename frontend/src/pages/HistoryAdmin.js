@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 
+import { Table } from "antd";
+
 import AuthContext from "../context/auth-context";
 
-import ClassList from "../components/Classes/ClassList/ClassList";
-import JoiningList from "../components/Joinings/JoiningList/JoiningList";
+import Spinner from "../components/Spinner/Spinner";
 
 class HistoryAdmin extends Component {
   state = {
@@ -57,8 +58,6 @@ class HistoryAdmin extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-
         const classes = resData.data.classes;
         if (this.isActive) {
           this.setState({ classes: classes, isLoading: false });
@@ -86,6 +85,9 @@ class HistoryAdmin extends Component {
                date
                time
              }
+             user {
+               name
+             }
             }
           }
         `
@@ -106,8 +108,6 @@ class HistoryAdmin extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-
         const joinings = resData.data.joinings;
         this.setState({ joinings: joinings, isLoading: false });
       })
@@ -122,19 +122,80 @@ class HistoryAdmin extends Component {
   }
 
   render() {
+    const columns = [
+      {
+        title: "Title",
+        dataIndex: "title",
+        key: "title",
+        filters: [
+          {
+            text: "Open",
+            value: "Open"
+          },
+          {
+            text: "Morning",
+            value: "Morning"
+          }
+        ],
+        onFilter: (value, record) => record.title.indexOf(value) === 0
+      },
+      {
+        title: "Time",
+        dataIndex: "time",
+        key: "time",
+        filters: [
+          {
+            text: "09:00",
+            value: "09:00"
+          },
+          {
+            text: "17:30",
+            value: "17:30"
+          }
+        ],
+        onFilter: (value, record) => record.time.indexOf(value) === 0
+      },
+      {
+        title: "Date",
+        dataIndex: "date",
+        key: "date"
+      },
+      {
+        title: "Joinees",
+        dataIndex: "joinees",
+        key: "joinees"
+      }
+    ];
+
+    let data = [];
+    const allJoinings = this.state.joinings.map(joining => {
+      return {
+        key: joining._id,
+        title: joining.mtclass.title,
+        time: joining.mtclass.time,
+        date: joining.mtclass.date,
+        joinees: joining.user.name
+      };
+    });
+    data = allJoinings;
+
     return (
       <React.Fragment>
-        <div>
-          <ClassList
-            classes={this.state.classes}
-            authUserId={this.context.userId}
-          />
-        </div>
-        <div>
-          <JoiningList
-            joinings={this.state.joinings}
-            onDelete={this.deleteJoiningHandler}
-          />
+        <div style={{ padding: "1rem" }}>
+          <h1>List of all the Joined Classes</h1>
+          {this.state.isLoading ? (
+            <Spinner />
+          ) : (
+            <Table
+              style={{
+                background: "rgba(255, 255, 255, 0.8)",
+                borderRadius: "5px",
+                width: "100%"
+              }}
+              columns={columns}
+              dataSource={data}
+            />
+          )}
         </div>
       </React.Fragment>
     );

@@ -16,10 +16,9 @@ const classes = async classIds => {
     const classes = await Class.find({ _id: { $in: classIds } });
     classes.sort((a, b) => {
       return (
-        classIds.indexOf(a._id.toString()) - classIds.indexOf(b._id.toString())
+        classIds.indexOf(b._id.toString()) - classIds.indexOf(a._id.toString())
       );
     });
-    console.log(classes, classIds);
 
     return classes.map(mtclass => {
       return transformClass(mtclass);
@@ -56,7 +55,8 @@ const transformClass = mtclass => {
     ...mtclass._doc,
     _id: mtclass.id,
     date: dateToString(mtclass._doc.date),
-    creator: () => user(mtclass.creator)
+    creator: () => user(mtclass.creator),
+    trainer: mtclass.trainer
   };
 };
 

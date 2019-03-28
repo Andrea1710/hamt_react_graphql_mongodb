@@ -69,9 +69,29 @@ module.exports = {
 
     return {
       username: user.name,
+      email: user.email,
       userId: user.id,
       token: token,
       tokenExpiration: 1
     };
+  },
+
+  cancelUser: async (args, req) => {
+    // if (!req.isAuth) {
+    //   throw new Error("Unauthenticated!");
+    // }
+
+    try {
+      const user = await User.findById(args.userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      await User.deleteOne({ _id: args.userId });
+
+      return user;
+    } catch (err) {
+      throw err;
+    }
   }
 };

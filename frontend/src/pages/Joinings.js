@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 
+import { Table, Tag } from "antd";
+
 import Spinner from "../components/Spinner/Spinner";
 import AuthContext from "../context/auth-context";
-import JoiningList from "../components/Joinings/JoiningList/JoiningList";
 
 class JoiningsPage extends Component {
   state = {
@@ -30,6 +31,9 @@ class JoiningsPage extends Component {
                date
                time
              }
+             user {
+               name
+             }
             }
           }
         `
@@ -51,6 +55,8 @@ class JoiningsPage extends Component {
       })
       .then(resData => {
         const joinings = resData.data.joinings;
+        console.log(joinings);
+
         this.setState({ joinings: joinings, isLoading: false });
       })
       .catch(err => {
@@ -104,17 +110,93 @@ class JoiningsPage extends Component {
   };
 
   render() {
+    const columns = [
+      {
+        title: "Title",
+        dataIndex: "title",
+        key: "title"
+      },
+      {
+        title: "Time",
+        dataIndex: "time",
+        key: "time"
+      },
+      {
+        title: "Date",
+        dataIndex: "date",
+        key: "date"
+      },
+      {
+        title: "Tags",
+        key: "tags",
+        dataIndex: "tags",
+        render: tags => (
+          <span>
+            {tags.map(tag => {
+              let color;
+              if (tag === "09:00") {
+                color = "green";
+                tag = "morning";
+              } else {
+                color = "red";
+                tag = "afternoon";
+              }
+              return (
+                <Tag color={color} key={tag}>
+                  {tag.toUpperCase()}
+                </Tag>
+              );
+            })}
+          </span>
+        )
+      },
+      {
+        title: "Joinee",
+        dataIndex: "joinee",
+        key: "joinee"
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (text, record) => (
+          <span>
+            <button onClick={() => this.deleteJoiningHandler(record.key)}>
+              Delete Joining
+            </button>
+          </span>
+        )
+      }
+    ];
+
+    let data = [];
+    const allJoinings = this.state.joinings.map(joining => {
+      return {
+        key: joining._id,
+        title: joining.mtclass.title,
+        time: joining.mtclass.time,
+        date: joining.mtclass.date,
+        tags: [joining.mtclass.time.toString()],
+        joinee: joining.user.name
+      };
+    });
+    data = allJoinings;
+
     let joiningPage;
     if (this.state.joinings.length > 0) {
       joiningPage = (
-        <JoiningList
-          joinings={this.state.joinings}
-          onDelete={this.deleteJoiningHandler}
+        <Table
+          style={{
+            background: "rgba(255, 255, 255, 0.8)",
+            borderRadius: "5px",
+            width: "100%"
+          }}
+          columns={columns}
+          dataSource={data}
         />
       );
     } else {
       joiningPage = (
-        <h3 style={{ textAlign: "center" }}>
+        <h3 style={{ color: "white", textAlign: "center" }}>
           You didn't join any Muay Thai class yet!
         </h3>
       );
@@ -122,6 +204,9 @@ class JoiningsPage extends Component {
 
     return (
       <React.Fragment>
+        {this.context.userId === "5c9b3c68211874c338b15058" && (
+          <h1>List of all the Classes joined by the Users</h1>
+        )}
         {this.state.isLoading ? <Spinner /> : joiningPage}
       </React.Fragment>
     );

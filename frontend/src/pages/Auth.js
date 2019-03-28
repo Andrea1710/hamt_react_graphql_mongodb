@@ -110,6 +110,7 @@ class AuthPage extends Component {
           login(email: "${email}", password: "${password}") {
             userId
             token
+            email
             tokenExpiration
             username 
           }
@@ -153,8 +154,9 @@ class AuthPage extends Component {
           this.context.login(
             resData.data.login.token,
             resData.data.login.userId,
+            resData.data.login.tokenExpiration,
             resData.data.login.username,
-            resData.data.login.tokenExpiration
+            resData.data.login.email
           );
         }
       })

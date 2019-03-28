@@ -135,7 +135,7 @@ input.error {
 }
 
 @media (max-width: 768px) {
-  .form-wrapper {
-    width: 80%;
+  div.form-wrapper {
+    width: 100%;
   }
 }
