@@ -479,7 +479,7 @@ class ClassesPage extends Component {
               this.context.token &&
               new Date().getHours + ":00" === this.state.selectedClass.time
                 ? "Join"
-                : "Confirm"
+                : "00:34 minutes to next Class"
             }
           >
             <h1>{this.state.selectedClass.title}</h1>
