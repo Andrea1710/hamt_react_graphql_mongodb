@@ -43,7 +43,7 @@
 
 @media (min-width: 768px) {
   .modal {
-    width: 30rem;
+    width: 100%;
     left: calc((100% - 30rem) / 2);
   }
 }

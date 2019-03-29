@@ -56,6 +56,16 @@ module.exports = buildSchema(`
       gender: String!
     }
 
+    input AdminInput {
+      name: String!
+      email: String!
+      password: String!
+      date: String!
+      gender: String!
+      plan: String
+      planExpiration: String
+    }
+
     type RootQuery {
       classes: [Class!]!
       users: [User!]!
@@ -67,6 +77,7 @@ module.exports = buildSchema(`
       createClass(classInput: ClassInput): Class
       cancelClass(classId: ID!): Class
       createUser(userInput: UserInput): User
+      createUserAdmin(adminInput: AdminInput): User
       cancelUser(userId: ID!): User!
       joinClass(classId: ID!): Joining!
       joinCancel(joiningId: ID!): Class!

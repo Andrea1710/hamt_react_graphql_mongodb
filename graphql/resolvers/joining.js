@@ -10,7 +10,7 @@ module.exports = {
     }
 
     try {
-      if (req.userId === "5c9b3c68211874c338b15058") {
+      if (req.userId === "5c9d930f1134f1e2f2a7bd97") {
         const joiningsAdmin = await Joining.find();
         return joiningsAdmin.map(joining => {
           return transformJoining(joining);

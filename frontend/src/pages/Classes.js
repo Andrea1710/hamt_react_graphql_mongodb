@@ -351,7 +351,7 @@ class ClassesPage extends Component {
     data = allClasses;
 
     let showClasses;
-    if (this.context.userId === "5c9b3c68211874c338b15058") {
+    if (this.context.userId === "5c9d930f1134f1e2f2a7bd97") {
       showClasses = (
         <Table
           style={{
@@ -470,8 +470,17 @@ class ClassesPage extends Component {
             canCancel
             canConfirm
             onCancel={this.modalCancelHandler}
-            onConfirm={this.joinClassHandler}
-            confirmText={this.context.token ? "Join" : "Confirm"}
+            onConfirm={
+              new Date().getHours + ":00" === this.state.selectedClass.time
+                ? this.joinClassHandler
+                : this.modalCancelHandler
+            }
+            confirmText={
+              this.context.token &&
+              new Date().getHours + ":00" === this.state.selectedClass.time
+                ? "Join"
+                : "Confirm"
+            }
           >
             <h1>{this.state.selectedClass.title}</h1>
             <p>
@@ -490,7 +499,7 @@ class ClassesPage extends Component {
           </Modal>
         )}
         {this.context.token &&
-          this.context.userId === "5c9b3c68211874c338b15058" && (
+          this.context.userId === "5c9d930f1134f1e2f2a7bd97" && (
             <div className="classes-control">
               <p>Create a new Muay Thai Class</p>
               <button className="btn" onClick={this.startCreateClassHandler}>

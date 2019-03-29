@@ -204,7 +204,7 @@ class JoiningsPage extends Component {
 
     return (
       <React.Fragment>
-        {this.context.userId === "5c9b3c68211874c338b15058" && (
+        {this.context.userId === "5c9d930f1134f1e2f2a7bd97" && (
           <h1>List of all the Classes joined by the Users</h1>
         )}
         {this.state.isLoading ? <Spinner /> : joiningPage}

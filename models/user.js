@@ -23,6 +23,14 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  plan: {
+    type: String,
+    required: true
+  },
+  planExpiration: {
+    type: String,
+    required: true
+  },
   createdClasses: [
     {
       type: Schema.Types.ObjectId,

@@ -112,7 +112,7 @@ class AuthPage extends Component {
             token
             email
             tokenExpiration
-            username 
+            username
           }
         }
       `

@@ -13,11 +13,11 @@ body {
 }
 
 .form-control label {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .form-control {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .form-actions button,
@@ -46,5 +46,8 @@ body {
 @media (max-width: 768px) {
   .btn {
     font-size: 0.8rem;
+  }
+  .form-control {
+    width: 100%;
   }
 }

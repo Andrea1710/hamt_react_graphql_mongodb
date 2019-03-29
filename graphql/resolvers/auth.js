@@ -48,6 +48,54 @@ module.exports = {
     }
   },
 
+  createUserAdmin: async args => {
+    const errors = [];
+    if (!validator.isEmail(args.adminInput.email)) {
+      errors.push({ message: "Email is invalid" });
+    }
+    if (
+      validator.isEmpty(args.adminInput.password) ||
+      !validator.isLength(args.adminInput.password, { min: 5 })
+    ) {
+      errors.push({
+        message: "Password too short (It should be at least of 5 characters"
+      });
+    }
+    if (errors.length > 0) {
+      const error = new Error("Invalid Input");
+      throw error;
+    }
+
+    try {
+      const existingUser = await User.findOne({
+        email: args.adminInput.email
+      });
+      if (existingUser) {
+        throw new Error("An User with this email exists already");
+      }
+      const hashedPassword = await bcrypt.hash(args.adminInput.password, 12);
+
+      const user = new User({
+        name: args.adminInput.name,
+        email: args.adminInput.email,
+        password: hashedPassword,
+        date: new Date(args.adminInput.date),
+        gender: args.adminInput.gender,
+        plan: args.adminInput.plan,
+        planExpiration: args.adminInput.planExpiration
+      });
+
+      const result = await user.save();
+
+      console.log(result);
+
+      return { ...result._doc, password: null, _id: result.id };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+
   login: async ({ email, password }) => {
     const user = await User.findOne({ email: email });
 

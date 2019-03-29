@@ -8,13 +8,22 @@ import "antd/dist/antd.css";
 
 import AuthContext from "../context/auth-context";
 
+import Modal from "../components/Modal/Modal";
+import Backdrop from "../components/Backdrop/Backdrop";
 import Spinner from "../components/Spinner/Spinner";
 
 class Users extends Component {
   state = {
     isLoading: false,
     users: [],
-    selectedItems: []
+    selectedItems: [],
+    name: "",
+    email: "",
+    password: "",
+    gender: "",
+    plan: "",
+    planExpiration: "",
+    creating: false
   };
   isActive = true;
 
@@ -23,6 +32,15 @@ class Users extends Component {
   componentDidMount() {
     this.fetchUsers();
   }
+
+  startCreateUserHandler = () => {
+    this.setState({ creating: true });
+  };
+
+  onChangeHandler = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
 
   fetchUsers() {
     this.setState({ isLoading: true });
@@ -71,6 +89,58 @@ class Users extends Component {
         }
       });
   }
+
+  modalConfirmHandler = () => {
+    this.setState({ creating: false });
+    const name = this.state.name;
+    const email = this.state.email;
+    const password = this.state.password;
+    const gender = this.state.gender;
+    const plan = this.state.plan;
+    const planExpiration = this.state.planExpiration;
+
+    const requestBody = {
+      query: `
+          mutation {
+            createUserAdmin(adminInput: {name: "${name}", email: "${email}", password: "${password}", date: "${new Date().toISOString()}", gender: "${gender}", plan: "${plan}", planExpiration: "${planExpiration}"}) {
+              _id
+              name
+              email
+              gender
+              plan
+              planExpiration
+            }
+          }
+        `
+    };
+
+    const token = this.context.token;
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  modalCancelHandler = () => {
+    this.setState({ creating: false });
+  };
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
@@ -273,6 +343,93 @@ class Users extends Component {
             dataSource={data}
             columns={columns}
           />
+        )}
+        <button
+          style={{ color: "white" }}
+          onClick={this.startCreateUserHandler}
+        >
+          Create User
+        </button>
+        {this.state.creating && <Backdrop />}
+        {this.state.creating && (
+          <Modal
+            className="modal"
+            title="Creation of a new User"
+            canCancel
+            canConfirm
+            onCancel={this.modalCancelHandler}
+            onConfirm={this.modalConfirmHandler}
+            confirmText="Confirm"
+          >
+            <form>
+              <div className="form-control">
+                <label htmlFor="name">Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  id="name"
+                  value={this.state.name}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="email">Email</label>
+                <input
+                  name="email"
+                  type="text"
+                  id="email"
+                  value={this.state.email}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="password">Password</label>
+                <input
+                  name="password"
+                  type="password"
+                  id="password"
+                  value={this.state.password}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="gender">Gender</label>
+                <input
+                  name="gender"
+                  type="text"
+                  id="gender"
+                  value={this.state.gender}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </div>
+              <div className="form-control">
+                <label
+                  style={{ display: "inline", marginRight: "10px" }}
+                  htmlFor="plan"
+                >
+                  Plan
+                </label>
+                <small>Membership-Full | Membership-3 | No Plan</small>
+                <input
+                  name="plan"
+                  type="text"
+                  id="plan"
+                  value={this.state.plan}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="planExpiration">Plan Expiration Date</label>
+                <input
+                  name="planExpiration"
+                  type="text"
+                  id="planExpiration"
+                  value={this.state.planExpiration}
+                  onChange={event => this.onChangeHandler(event)}
+                />
+              </div>
+            </form>
+          </Modal>
         )}
       </div>
     );

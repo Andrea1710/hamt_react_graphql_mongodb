@@ -21,6 +21,8 @@ class App extends Component {
     userId: null,
     username: null,
     email: null,
+    plan: null,
+    planExpiration: null,
     tokenExpiration: null,
     sideDrawerOpen: false
   };
@@ -37,12 +39,22 @@ class App extends Component {
     this.setState({ sideDrawerOpen: false });
   };
 
-  login = (token, userId, tokenExpiration, username, email) => {
+  login = (
+    token,
+    userId,
+    tokenExpiration,
+    username,
+    email,
+    plan,
+    planExpiration
+  ) => {
     this.setState({
       token: token,
       userId: userId,
       username: username,
-      email: email
+      email: email,
+      plan: plan,
+      planExpiration: planExpiration
     });
   };
 
@@ -64,6 +76,8 @@ class App extends Component {
               tokenExpiration: this.state.tokenExpiration,
               userId: this.state.userId,
               username: this.state.username,
+              plan: this.state.plan,
+              planExpiration: this.state.planExpiration,
               email: this.state.email,
               login: this.login,
               logout: this.logout
@@ -85,11 +99,11 @@ class App extends Component {
                   <Route path="/joinings" component={JoiningsPage} />
                 )}
                 {this.state.token &&
-                  this.state.userId === "5c9b3c68211874c338b15058" && (
+                  this.state.userId === "5c9d930f1134f1e2f2a7bd97" && (
                     <Route path="/history-admin" component={HistoryAdmin} />
                   )}
                 {this.state.token &&
-                  this.state.userId === "5c9b3c68211874c338b15058" && (
+                  this.state.userId === "5c9d930f1134f1e2f2a7bd97" && (
                     <Route path="/users" component={Users} />
                   )}
                 {!this.state.token && <Redirect to="/auth" exact />}
